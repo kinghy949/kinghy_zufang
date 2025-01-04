@@ -1,5 +1,6 @@
 import { getHomeDataApi } from '../api/home';
 import { BannerListDataSource } from '../models/HomeData';
+import SearchBar from '../views/Home/SearchBar';
 
 import SwiperLayout from '../views/Home/SwiperLayout';
 
@@ -18,16 +19,16 @@ export default struct Home {
   }
 
   build() {
-    Scroll() {
-      Column() {
-        // 轮播图组件（使用prop通信）
+    Stack() {
+      Scroll() {
         SwiperLayout({ bannerList: this.bannerList })
       }
-      .width('100%')
+      .height('100%')
+      .align(Alignment.TopStart)
+
+      SearchBar()
     }
-    .width('100%')
     .height('100%')
-    .scrollBar(BarState.Off)
-    .align(Alignment.TopStart)
+    .alignContent(Alignment.TopStart)
   }
 }
