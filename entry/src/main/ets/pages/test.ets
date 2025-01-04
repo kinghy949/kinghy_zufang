@@ -2,7 +2,7 @@
 export default struct test {
   build() {
     Column() {
-      Text("tssssest");
+      Text("tssssssest");
     }
   }
 }
