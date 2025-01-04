@@ -39,6 +39,14 @@
     {
       "name": "gray_text",
       "value": "#A0A0A0"
+    },
+    {
+      "name": "indicator_color",
+      "value": "#CCCBCB"
+    },
+    {
+      "name": "indicator_active_color",
+      "value": "#36d1a1"
     }
   ]
 }
