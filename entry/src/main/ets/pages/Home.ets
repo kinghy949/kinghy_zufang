@@ -1,39 +1,40 @@
-import { getHomeDataApi } from '../api/home';
-import { PADDING } from '../constants/size';
-import { BannerListDataSource, INavList, IPlanList, ITileList } from '../models/HomeData';
-import Ad from '../views/Home/Ad';
-import NavList from '../views/Home/NavList';
-import PlanList from '../views/Home/PlanList';
-import RoomRecommend from '../views/Home/RoomRecommend';
-import SearchBar from '../views/Home/SearchBar';
-
 import SwiperLayout from '../views/Home/SwiperLayout';
+import SearchBar from '../views/Home/SearchBar';
+import NavList from '../views/Home/NavList';
 import TileList from '../views/Home/TileList';
+import PlanList from '../views/Home/PlanList';
+import Ad from '../views/Home/Ad';
+import RoomRecommend from '../views/Home/RoomRecommend';
+import ScrollContainer from '../components/ScrollContainer';
+
+import { getHomeDataApi } from '../api/home';
+import { BannerListDataSource, IColor, INavList, IPlanList, ITileList } from '../models/HomeData';
+import { PADDING } from '../constants/size';
 
 @Component
 export default struct Home {
-  @State bannerList: BannerListDataSource = new BannerListDataSource()
+  // 首页数据
+  @State bannerList: BannerListDataSource = new BannerListDataSource([]);
   @State navList: INavList = [];
-  @State tileList: ITileList = []
+  @State tileList: ITileList = [];
   @State planList: IPlanList = [];
   @State adPicture: string = '';
   scrollY: number = 0;
   @State bgColor: string = 'rgba(255, 255, 255, 0)'
   @State fontColor: string = 'rgb(255, 255, 255)'
 
-  // 获取首页数据函数
-  getHomeData = async () => {
-    const result = await getHomeDataApi()
-    this.bannerList.setList(result.bannerList);
-    this.navList = result.navList;
-    this.tileList = result.tileList;
-    this.planList = result.planList;
-    this.adPicture = result.adPicture;
+  // 组件生命周期
+  aboutToAppear() {
+    this.getHomeData()
   }
 
-  // 生命周期函数：初始化渲染时触发
-  aboutToAppear(): void {
-    this.getHomeData()
+  async getHomeData() {
+    const homeData = await getHomeDataApi()
+    this.bannerList = new BannerListDataSource(homeData.bannerList);
+    this.navList = homeData.navList;
+    this.tileList = homeData.tileList;
+    this.planList = homeData.planList;
+    this.adPicture = homeData.adPicture;
   }
 
   // 处理滚动
@@ -56,31 +57,30 @@ export default struct Home {
     }
   }
 
+  @Builder
+  contentBuilder() {
+    SwiperLayout({ bannerList: this.bannerList })
+    Column() {
+      NavList({ navList: this.navList })
+      TileList({ tileList: this.tileList })
+      PlanList({ planList: this.planList })
+      Ad({ adPicture: this.adPicture })
+    }.padding({ left: PADDING, right: PADDING })
+
+    RoomRecommend()
+  }
+
+  @Builder
+  navBuilder($$: IColor) {
+    SearchBar({ bgColor: $$.bgColor, fontColor: $$.fontColor });
+  }
+
   build() {
-    Stack() {
-      Scroll() {
-        Column() {
-          SwiperLayout({ bannerList: this.bannerList })
-
-          Column() {
-            NavList({ navList: this.navList })
-            TileList({ tileList: this.tileList })
-            PlanList({ planList: this.planList })
-            Ad({ adPicture: this.adPicture })
-          }.padding({ left: PADDING, right: PADDING })
-
-          RoomRecommend()
-        }
-        .justifyContent(FlexAlign.Start)
-      }
-      .height('100%')
-      .align(Alignment.TopStart)
-      .scrollBar(BarState.Off)
-      .onDidScroll(this.handleScroll)
-
-      SearchBar({ bgColor: this.bgColor, fontColor: this.fontColor })
-    }
-    .height('100%')
-    .alignContent(Alignment.TopStart)
+    ScrollContainer({
+      contentBuilder: () => {
+        this.contentBuilder()
+      },
+      navBuilder: this.navBuilder
+    })
   }
 }
