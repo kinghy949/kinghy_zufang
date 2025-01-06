@@ -1,15 +1,15 @@
-import type { BannerListDataSource, IBannerItem } from '../../models/HomeData';
+import type { BannerListDataSource, IBannerItem } from '../../model/HomeData';
+import { getWindowTopHeight, rvp } from '../../utils/responsive';
 
 @Component
 export default struct SwiperLayout {
-  @StorageProp('windowTopHeight') windowTopHeight: number = 0;
   @Prop bannerList: BannerListDataSource
 
   build() {
     if (this.bannerList.totalCount()) {
       Swiper() {
         LazyForEach(this.bannerList, (banner: IBannerItem) => {
-          Image(banner.imageURL).width('100%').height(175 + px2vp(this.windowTopHeight))
+          Image(banner.imageURL).width('100%').height(rvp(175) + getWindowTopHeight())
         }, (item: IBannerItem) => item.id + '')
       }
       .loop(true)

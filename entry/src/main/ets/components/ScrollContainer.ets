@@ -1,6 +1,6 @@
 import { window } from '@kit.ArkUI';
-import { IColor } from '../models/HomeData';
-import { getWindowTopHeight } from '../utils/responsive';
+import { IColor } from '../model/HomeData';
+import { getWindowTopHeight, rvp } from '../utils/responsive';
 
 @Component
 export default struct ScrollContainer {
@@ -55,7 +55,7 @@ export default struct ScrollContainer {
       .scrollBar(BarState.Off)
       .align(Alignment.TopStart)
       .backgroundColor($r('app.color.bg_gray_second'))
-      .padding({ bottom: 10 })
+      .padding({ bottom: rvp(10) })
       .onDidScroll(this.handleScroll)
 
       Column() {

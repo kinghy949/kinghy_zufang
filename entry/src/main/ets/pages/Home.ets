@@ -8,8 +8,9 @@ import RoomRecommend from '../views/Home/RoomRecommend';
 import ScrollContainer from '../components/ScrollContainer';
 
 import { getHomeDataApi } from '../api/home';
-import { BannerListDataSource, IColor, INavList, IPlanList, ITileList } from '../models/HomeData';
+import { BannerListDataSource, IColor, INavList, IPlanList, ITileList } from '../model/HomeData';
 import { PADDING } from '../constants/size';
+import { rvp } from '../utils/responsive';
 
 @Component
 export default struct Home {
@@ -23,10 +24,11 @@ export default struct Home {
   @State bgColor: string = 'rgba(255, 255, 255, 0)'
   @State fontColor: string = 'rgb(255, 255, 255)'
 
-  // 组件生命周期
   aboutToAppear() {
     this.getHomeData()
+
   }
+
 
   async getHomeData() {
     const homeData = await getHomeDataApi()
@@ -65,7 +67,7 @@ export default struct Home {
       TileList({ tileList: this.tileList })
       PlanList({ planList: this.planList })
       Ad({ adPicture: this.adPicture })
-    }.padding({ left: PADDING, right: PADDING })
+    }.padding({ left: rvp(PADDING), right: rvp(PADDING) })
 
     RoomRecommend()
   }
