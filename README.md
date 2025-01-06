@@ -13,7 +13,6 @@ ArkTs + ArkUI + Axios
 - 进入entry/src/main/ets/utils/http.ets 更换baseURL为自己的ip
 - 从pages中的Index.ets（程序入口）即可正常访问
 
-zzsds
 
 ### 展示
 #### 首页
